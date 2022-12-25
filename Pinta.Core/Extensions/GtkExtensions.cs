@@ -31,6 +31,7 @@ namespace Pinta.Core
 {
 	public static class GtkExtensions
 	{
+#if false // TODO-GTK4
 		public const int MouseLeftButton = 1;
 		public const int MouseMiddleButton = 2;
 		public const int MouseRightButton = 3;
@@ -57,6 +58,7 @@ namespace Pinta.Core
 			};
 			return item;
 		}
+#endif
 
 		public static void AddAction (this Gtk.Application app, Command action)
 		{
@@ -75,6 +77,7 @@ namespace Pinta.Core
 			app.SetAccelsForAction (action.FullName, accels);
 		}
 
+#if false // TODO-GTK4
 		public static void Remove (this GLib.Menu menu, Command action)
 		{
 			for (int i = 0; i < menu.NItems; ++i) {
@@ -288,5 +291,6 @@ namespace Pinta.Core
 		{
 			return file.Replace (null, false, GLib.FileCreateFlags.None, null);
 		}
+#endif
 	}
 }
