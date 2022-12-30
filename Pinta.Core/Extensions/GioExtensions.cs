@@ -1,5 +1,5 @@
 // 
-// CanvasInvalidatedEventArgs.cs
+// GioExtensions.cs
 //  
 // Author:
 //       Jonathan Pobst <monkey@jpobst.com>
@@ -25,24 +25,39 @@
 // THE SOFTWARE.
 
 using System;
-using Gdk;
+using System.Linq;
+using Gio;
 
 namespace Pinta.Core
 {
-	public class CanvasInvalidatedEventArgs : EventArgs
+	public static class GioExtensions
 	{
-		public bool EntireSurface { get; set; }
-		public RectangleD Rectangle { get; set; }
-
-		public CanvasInvalidatedEventArgs ()
+		/// <summary>
+		/// Return the display name for the file. Note that this can be very different from file.Basename,
+		/// and should only be used for display purposes rather than identifying the file.
+		/// </summary>
+		public static string GetDisplayName (this Gio.File file)
 		{
-			EntireSurface = true;
+#if false // TODO-GTK4 - needs gir.core bindings
+			// TODO-GTK4: use G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME if there are bindings for it.
+			var info = file.QueryInfo ("standard::display-name", GLib.FileQueryInfoFlags.None, cancellable: null);
+			return info.DisplayName;
+#else
+			throw new NotImplementedException();
+#endif
 		}
 
-		public CanvasInvalidatedEventArgs (RectangleD rect)
+		/// <summary>
+		/// Returns an output stream for creating or overwriting the file.
+		/// NOTE: if you don't wrap this in a GLib.GioStream, you must call Close() !
+		/// </summary>
+		public static Gio.OutputStream Replace (this Gio.File file)
 		{
-			EntireSurface = false;
-			Rectangle = rect;
+#if false // TODO-GTK4 - needs gir.core bindings
+			return file.Replace (null, false, Gio.FileCreateFlags.None, null);
+#else
+			throw new NotImplementedException();
+#endif
 		}
 	}
 }
